@@ -49,23 +49,27 @@ namespace CardProbability
         public Hand GetHand(int numCards)
         {
             List<Card> handCards = new List<Card>();
-            for (int i = 0; i < numCards; i++)
-            {
-                Card c = null;
-                do
-                {
-                    c = this.cards[rand.Next(0, this.cards.Count)];
-                }
-                while (handCards.Contains(c));
 
-                handCards.Add(c);
-            }
+            this.Shuffle();
+
+            handCards.AddRange(this.cards.Take(numCards));
 
             Hand hand = new Hand(handCards);
             return hand;
         }
 
-        public int Count
+        private void Shuffle()
+        {
+            for (int i = 0; i < this.Count; i++)
+            {
+                int index = rand.Next(0, this.cards.Count);
+                Card temp = this.cards[i];
+                this.cards[i] = this.cards[index];
+                this.cards[index] = temp;
+            }
+        }
+
+        private int Count
         {
             get
             {
